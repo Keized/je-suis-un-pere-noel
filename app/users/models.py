@@ -30,10 +30,3 @@ class User(db.Model):
         self.email = email
         self.password_hash = self.hash_password(password)
 
-
-def init_db():
-    db.drop_all()
-    db.create_all()
-    db.session.add(Event("Noël 2021"))
-    db.session.commit()
-    lg.warning('Database initialized!')

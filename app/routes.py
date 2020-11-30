@@ -2,8 +2,9 @@ from flask import Flask, request, jsonify, abort, url_for, g, make_response
 from flask_httpauth import HTTPBasicAuth
 from .models import User, db
 from functools import wraps
-import jwt
 from datetime import datetime, timedelta
+
+import jwt
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -13,8 +14,7 @@ app.config.from_object('config')
 
 
 def auth_required(func):
-    @wraps(func)
-    def decorated(*args, **kwargs):
+    def wrap(*args, **kwargs):
         token = None
         current_user = None
         if 'x-access-token' in request.headers:
@@ -33,7 +33,7 @@ def auth_required(func):
         return func(current_user, *args, **kwargs)
 
 
-    return decorated
+    return wrap
 
 
 @app.route('/api/users', methods=['GET'])
